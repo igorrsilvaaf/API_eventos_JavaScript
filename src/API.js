@@ -1,14 +1,14 @@
 const express = require('express');
+const app = express();
+const port = 3000;
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const app = express();
-const port = 3000;
 const saltRounds = 10;
 const secretKey = 'servidorMongo';
 
 // Conectar ao MongoDB
-mongoose.connect('mongodb://localhost:27017/meu_banco_de_dados', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/meu_banco_de_dados')
   .then(() => console.log('Conectado ao MongoDB'))
   .catch(err => console.error('Erro ao conectar ao MongoDB', err));
 
