@@ -29,7 +29,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "E:/MEGA/Projetos/Projetos em JavaScript/api_com_javaScript",
+    "last_opened_file_path": "E:/MEGA/Projetos/Projetos em JavaScript/api_com_javaScript/src/style",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -40,6 +40,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\MEGA\Projetos\Projetos em JavaScript\api_com_javaScript\src\style" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\MEGA\Projetos\Projetos em JavaScript\api_com_javaScript\src\login" />
       <recent name="E:\MEGA\Projetos\Projetos em JavaScript\api_com_javaScript\src\register" />
@@ -72,7 +75,7 @@
       <option name="presentableId" value="Default" />
       <updated>1719109304219</updated>
       <workItem from="1719109305244" duration="5968000" />
-      <workItem from="1719198320421" duration="1227000" />
+      <workItem from="1719198320421" duration="3554000" />
     </task>
     <servers />
   </component>
