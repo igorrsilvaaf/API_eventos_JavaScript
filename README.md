@@ -4,4 +4,4 @@
 ![Login](assets/login_final.png)
 
 ## Register
-![Register](assets/register_final.png)
+![Register](assets/Register_final.png)
