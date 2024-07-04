@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
+app.use(cors());  // Adicionando o middleware de CORS
 const port = 3000;
 const saltRounds = 10;
 const secretKey = 'servidorMongo';
@@ -12,7 +14,10 @@ const secretKey = 'servidorMongo';
 // Conectar ao MongoDB
 (async () => {
   try {
-    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript');
+    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
     console.log('Conectado ao MongoDB');
   } catch (err) {
     console.error('Erro ao conectar ao MongoDB', err);
@@ -32,11 +37,9 @@ const User = mongoose.model('User', new mongoose.Schema({
   userPassword: { type: String, required: true }
 }));
 
-app.use(express.json());
-
 // Rota para responder à raiz (/)
 app.get('/', (req, res) => {
-  res.send('Bem-vindo à API!');
+  res.send('Conectado com sucesso!');
 });
 
 // Rota para registrar o novo usuário
@@ -117,7 +120,7 @@ const authenticate = (req, res, next) => {
 
 // Rota protegida de exemplo
 app.get('/protected', authenticate, (req, res) => {
-  res.json({ message: 'Bem-vindo à rota protegida!' });
+  res.json({ message: 'Autenticado com sucesso!' });
 });
 
 // Iniciar o servidor
