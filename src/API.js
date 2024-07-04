@@ -1,18 +1,30 @@
 const express = require('express');
-const app = express();
-const port = 3000;
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+
+const app = express();
+app.use(express.json());
+app.use(cors());  // Adicionando o middleware de CORS
+const port = 3000;
 const saltRounds = 10;
 const secretKey = 'servidorMongo';
 
 // Conectar ao MongoDB
-mongoose.connect('mongodb://localhost:27017/users')
-  .then(() => console.log('Conectado ao MongoDB'))
-  .catch(err => console.error('Erro ao conectar ao MongoDB', err));
+(async () => {
+  try {
+    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log('Conectado ao MongoDB');
+  } catch (err) {
+    console.error('Erro ao conectar ao MongoDB', err);
+  }
+})();
 
-// Definir o modelo de usuário
+// Definir o modelo de tabela
 const User = mongoose.model('User', new mongoose.Schema({
   userName: { type: String, required: true, unique: true },
   userEmail: { type: String, required: true, unique: true },
@@ -25,11 +37,9 @@ const User = mongoose.model('User', new mongoose.Schema({
   userPassword: { type: String, required: true }
 }));
 
-app.use(express.json());
-
 // Rota para responder à raiz (/)
 app.get('/', (req, res) => {
-  res.send('Bem-vindo à API!');
+  res.send('Conectado com sucesso!');
 });
 
 // Rota para registrar o novo usuário
@@ -47,7 +57,17 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
 
     // Criar um novo usuário
-    const newUser = new User({ userName, userEmail, userTelefone, userCelular, userCep, userCidade, userBairro, userEndereco, userPassword: hashedPassword });
+    const newUser = new User({
+      userName,
+      userEmail,
+      userTelefone,
+      userCelular,
+      userCep,
+      userCidade,
+      userBairro,
+      userEndereco,
+      userPassword: hashedPassword
+    });
     await newUser.save();
     res.status(201).json({ message: 'Usuário registrado com sucesso.' });
   } catch (error) {
@@ -100,7 +120,7 @@ const authenticate = (req, res, next) => {
 
 // Rota protegida de exemplo
 app.get('/protected', authenticate, (req, res) => {
-  res.json({ message: 'Bem-vindo à rota protegida!' });
+  res.json({ message: 'Autenticado com sucesso!' });
 });
 
 // Iniciar o servidor
