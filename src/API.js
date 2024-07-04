@@ -1,18 +1,25 @@
 const express = require('express');
-const app = express();
-const port = 3000;
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
+const app = express();
+app.use(express.json())
+const port = 3000;
 const saltRounds = 10;
 const secretKey = 'servidorMongo';
 
 // Conectar ao MongoDB
-mongoose.connect('mongodb://localhost:27017/users')
-  .then(() => console.log('Conectado ao MongoDB'))
-  .catch(err => console.error('Erro ao conectar ao MongoDB', err));
+(async () => {
+  try {
+    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript');
+    console.log('Conectado ao MongoDB');
+  } catch (err) {
+    console.error('Erro ao conectar ao MongoDB', err);
+  }
+})();
 
-// Definir o modelo de usuário
+// Definir o modelo de tabela
 const User = mongoose.model('User', new mongoose.Schema({
   userName: { type: String, required: true, unique: true },
   userEmail: { type: String, required: true, unique: true },
@@ -47,7 +54,17 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
 
     // Criar um novo usuário
-    const newUser = new User({ userName, userEmail, userTelefone, userCelular, userCep, userCidade, userBairro, userEndereco, userPassword: hashedPassword });
+    const newUser = new User({
+      userName,
+      userEmail,
+      userTelefone,
+      userCelular,
+      userCep,
+      userCidade,
+      userBairro,
+      userEndereco,
+      userPassword: hashedPassword
+    });
     await newUser.save();
     res.status(201).json({ message: 'Usuário registrado com sucesso.' });
   } catch (error) {
