@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-app.use(cors());  // Adicionando o middleware de CORS
+app.use(cors());
 const port = 3000;
 const saltRounds = 10;
 const secretKey = 'servidorMongo';
@@ -75,22 +75,21 @@ app.post('/register', async (req, res) => {
 
 // Rota para login de usuário
 app.post('/login', async (req, res) => {
-  const { userName, userPassword } = req.body;
+  console.log('Dados recebidos no login:', req.body); // Log dos dados recebidos
+  const { userEmail, userPassword } = req.body;
 
   try {
-    // Encontrar o usuário pelo nome
-    const user = await User.findOne({ userName });
+    const user = await User.findOne({ userEmail });
+    console.log('Usuário encontrado:', user); // Log do usuário encontrado
     if (!user) {
       return res.status(400).json({ message: 'Usuário não encontrado :(' });
     }
 
-    // Verificar a senha
     const isPasswordValid = await bcrypt.compare(userPassword, user.userPassword);
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Senha inválida, favor verifique e tente novamente!' });
     }
 
-    // Gerar um token JWT
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '2h' });
     res.json({ token });
   } catch (error) {
