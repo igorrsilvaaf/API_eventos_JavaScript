@@ -14,10 +14,7 @@ const secretKey = 'servidorMongo';
 // Conectar ao MongoDB
 (async () => {
   try {
-    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript');
     console.log('Conectado ao MongoDB');
   } catch (err) {
     console.error('Erro ao conectar ao MongoDB', err);
