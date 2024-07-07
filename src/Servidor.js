@@ -41,8 +41,8 @@ const authenticate = (req, res, next) => {
     return res.status(401).json({ message: 'Acesso negado' });
   }
 
-  const token = authHeader.split(' ')[1]; // Pega o token após "Bearer"
-  console.log('Token recebido:', token); // Log do token recebido
+  const token = authHeader.split(' ')[1];
+  console.log('Token recebido:', token);
 
   if (!token) {
     return res.status(401).json({ message: 'Acesso negado' });
@@ -50,11 +50,11 @@ const authenticate = (req, res, next) => {
 
   try {
     const verified = jwt.verify(token, secretKey);
-    console.log('Token verificado:', verified); // Log do token verificado
+    console.log('Token verificado:', verified);
     req.user = verified;
     next();
   } catch (err) {
-    console.error('Erro na verificação do token:', err); // Log do erro na verificação
+    console.error('Erro na verificação do token:', err);
     res.status(400).json({ message: 'Token inválido' });
   }
 };
@@ -69,16 +69,13 @@ app.post('/register', async (req, res) => {
   const { userName, userEmail, userTelefone, userCelular, userCep, userCidade, userBairro, userEndereco, userPassword } = req.body;
 
   try {
-    // Verificar se o usuário já existe
     const existUser = await User.findOne({ userEmail });
     if (existUser) {
       return res.status(400).json({ message: 'Usuário já cadastrado.' });
     }
 
-    // Criptografar a senha do usuário
     const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
 
-    // Criar um novo usuário
     const newUser = new User({
       userName,
       userEmail,
@@ -100,12 +97,12 @@ app.post('/register', async (req, res) => {
 
 // Rota para login de usuário
 app.post('/login', async (req, res) => {
-  console.log('Dados recebidos no login:', req.body); // Log dos dados recebidos
+  console.log('Dados recebidos no login:', req.body);
   const { userEmail, userPassword } = req.body;
 
   try {
     const user = await User.findOne({ userEmail });
-    console.log('Usuário encontrado:', user); // Log do usuário encontrado
+    console.log('Usuário encontrado:', user);
     if (!user) {
       return res.status(400).json({ message: 'Usuário não encontrado :(' });
     }
@@ -115,8 +112,8 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Senha inválida, favor verifique e tente novamente!' });
     }
 
-    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '24h' }); // Mudando a expiração para 24 horas
-    console.log('Token gerado:', token); // Log do token gerado
+    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '24h' });
+    console.log('Token gerado:', token);
     res.json({ token });
   } catch (error) {
     console.error('Erro ao fazer login:', error);
@@ -127,7 +124,7 @@ app.post('/login', async (req, res) => {
 // Rota para buscar todos os usuários
 app.get('/users', authenticate, async (req, res) => {
   try {
-    const users = await User.find().select('-userPassword'); // Excluir a senha dos resultados
+    const users = await User.find().select('-userPassword');
     res.json({ users });
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
@@ -135,9 +132,20 @@ app.get('/users', authenticate, async (req, res) => {
   }
 });
 
-// Rota protegida de exemplo
-app.get('/protected', authenticate, (req, res) => {
-  res.json({ message: 'Autenticado com sucesso!' });
+// Rota de pagamento
+app.post('/payment', authenticate, (req, res) => {
+  const { cardNumber, cardName, expiryDate, cvv } = req.body;
+
+  console.log('Processando pagamento...');
+  console.log(`Número do cartão: ${cardNumber}`);
+  console.log(`Nome no cartão: ${cardName}`);
+  console.log(`Data de validade: ${expiryDate}`);
+  console.log(`CVV: ${cvv}`);
+
+  // Simular um atraso de processamento
+  setTimeout(() => {
+    res.json({ message: 'Pagamento realizado com sucesso!' });
+  }, 2000);
 });
 
 // Iniciar o servidor
