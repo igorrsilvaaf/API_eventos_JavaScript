@@ -34,6 +34,31 @@ const User = mongoose.model('User', new mongoose.Schema({
   userPassword: { type: String, required: true }
 }));
 
+// Middleware de autenticação
+const authenticate = (req, res, next) => {
+  const authHeader = req.header('Authorization');
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Acesso negado' });
+  }
+
+  const token = authHeader.split(' ')[1]; // Pega o token após "Bearer"
+  console.log('Token recebido:', token); // Log do token recebido
+
+  if (!token) {
+    return res.status(401).json({ message: 'Acesso negado' });
+  }
+
+  try {
+    const verified = jwt.verify(token, secretKey);
+    console.log('Token verificado:', verified); // Log do token verificado
+    req.user = verified;
+    next();
+  } catch (err) {
+    console.error('Erro na verificação do token:', err); // Log do erro na verificação
+    res.status(400).json({ message: 'Token inválido' });
+  }
+};
+
 // Rota para responder à raiz (/)
 app.get('/', (req, res) => {
   res.send('Conectado com sucesso!');
@@ -90,7 +115,8 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Senha inválida, favor verifique e tente novamente!' });
     }
 
-    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '2h' });
+    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '24h' }); // Mudando a expiração para 24 horas
+    console.log('Token gerado:', token); // Log do token gerado
     res.json({ token });
   } catch (error) {
     console.error('Erro ao fazer login:', error);
@@ -98,21 +124,16 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Middleware de autenticação
-const authenticate = (req, res, next) => {
-  const token = req.header('Authorization');
-  if (!token) {
-    return res.status(401).json({ message: 'Acesso negado' });
-  }
-
+// Rota para buscar todos os usuários
+app.get('/users', authenticate, async (req, res) => {
   try {
-    const verified = jwt.verify(token, secretKey);
-    req.user = verified;
-    next();
-  } catch (err) {
-    res.status(400).json({ message: 'Token inválido' });
+    const users = await User.find().select('-userPassword'); // Excluir a senha dos resultados
+    res.json({ users });
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
   }
-};
+});
 
 // Rota protegida de exemplo
 app.get('/protected', authenticate, (req, res) => {
