@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '.env' });
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
@@ -7,14 +9,16 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 app.use(cors());
-const port = 3000;
+const port = process.env.PORT || 3000;
 const saltRounds = 10;
-const secretKey = 'servidorMongo';
+const secretKey = process.env.SECRET_KEY;
 
 // Conectar ao MongoDB
 (async () => {
   try {
-    await mongoose.connect('mongodb+srv://igorprogramacao24:6884@api-javascript.xnwphmr.mongodb.net/?retryWrites=true&w=majority&appName=api-javascript');
+    const uri = process.env.MONGODB_URI;
+    console.log('Conectando ao MongoDB com a URI:', uri);
+    await mongoose.connect(uri);
     console.log('Conectado ao MongoDB');
   } catch (err) {
     console.error('Erro ao conectar ao MongoDB', err);
@@ -22,8 +26,8 @@ const secretKey = 'servidorMongo';
 })();
 
 // Definir o modelo de tabela
-const User = mongoose.model('User', new mongoose.Schema({
-  userName: { type: String, required: true, unique: true },
+const userSchema = new mongoose.Schema({
+  userName: { type: String, required: true },
   userEmail: { type: String, required: true, unique: true },
   userTelefone: { type: String, required: true, unique: true },
   userCelular: { type: String, required: true, unique: true },
@@ -32,20 +36,22 @@ const User = mongoose.model('User', new mongoose.Schema({
   userBairro: { type: String, required: true },
   userEndereco: { type: String, required: true },
   userPassword: { type: String, required: true }
-}));
+});
+
+const User = mongoose.model('User', userSchema);
 
 // Middleware de autenticação
 const authenticate = (req, res, next) => {
   const authHeader = req.header('Authorization');
   if (!authHeader) {
-    return res.status(401).json({ message: 'Acesso negado' });
+    return res.status(401).json({ message: 'Acesso negado: Cabeçalho de autorização ausente' });
   }
 
   const token = authHeader.split(' ')[1];
   console.log('Token recebido:', token);
 
   if (!token) {
-    return res.status(401).json({ message: 'Acesso negado' });
+    return res.status(401).json({ message: 'Acesso negado: Token ausente' });
   }
 
   try {
@@ -104,12 +110,12 @@ app.post('/login', async (req, res) => {
     const user = await User.findOne({ userEmail });
     console.log('Usuário encontrado:', user);
     if (!user) {
-      return res.status(400).json({ message: 'Usuário não encontrado :(' });
+      return res.status(400).json({ message: 'Usuário não encontrado.' });
     }
 
     const isPasswordValid = await bcrypt.compare(userPassword, user.userPassword);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Senha inválida, favor verifique e tente novamente!' });
+      return res.status(400).json({ message: 'Senha inválida. Favor verificar e tentar novamente.' });
     }
 
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '24h' });
