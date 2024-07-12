@@ -154,6 +154,17 @@ app.post('/payment', authenticate, (req, res) => {
   }, 2000);
 });
 
+// Rota para obter informações do usuário logado
+app.get('/users/me', authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-userPassword');
+    res.json({ user });
+  } catch (error) {
+    console.error('Erro ao obter informações do usuário:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+});
+
 // Iniciar o servidor
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
