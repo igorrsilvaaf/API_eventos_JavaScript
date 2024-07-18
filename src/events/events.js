@@ -34,10 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const eventsContainer = document.getElementById('eventsContainer');
   const noRecentEventsMessage = document.getElementById('noRecentEventsMessage');
   const noUpcomingEventsMessage = document.getElementById('noUpcomingEventsMessage');
-
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
 
   function formatDate(dateString) {
     const [year, month, day] = dateString.split('-');
@@ -185,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isVisible = searchModal.style.display === 'block';
     searchModal.style.display = isVisible ? 'none' : 'block';
     if (!isVisible) {
-      clearSearchInputs()
+      clearSearchInputs();
     }
   };
 
@@ -273,6 +270,21 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(autoMoveCarousel, 3000);
 
   window.moveCarousel = moveCarousel;
+
+  window.selectTicket = function(eventId) {
+    const event = events.find(e => e.id === eventId);
+    if (event) {
+      const url = new URL('../buy_tickets/buy_tickets.html', window.location.href);
+      url.searchParams.append('eventId', event.id);
+      url.searchParams.append('title', event.title);
+      url.searchParams.append('date', event.date);
+      url.searchParams.append('location', event.location);
+      url.searchParams.append('description', event.description);
+      window.location.href = url.href;
+    } else {
+      console.error('Evento não encontrado');
+    }
+  };
 });
 
 function isUserLoggedIn() {
@@ -289,65 +301,6 @@ function openLoginModal(eventId, ticketType) {
 function closeLoginModal() {
   const loginModal = document.getElementById('loginModal');
   loginModal.style.display = 'none';
-}
-
-function selectTicket(eventId) {
-  if (!isUserLoggedIn()) {
-    openLoginModal(eventId);
-    return;
-  }
-
-  Swal.fire({
-    title: 'Selecione o Tipo de Ingresso',
-    input: 'select',
-    inputOptions: {
-      'normal': 'Normal',
-      'meia': 'Meia Entrada',
-      'camarote': 'Camarote',
-      'vip': 'VIP'
-    },
-    inputPlaceholder: 'Selecione um tipo',
-    showCancelButton: true,
-    inputValidator: (value) => {
-      if (!value) {
-        return 'Você precisa selecionar um tipo de ingresso!';
-      }
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const ticketType = result.value;
-    }
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('token');
-
-  if (token) {
-    fetch('http://localhost:3000/users/me', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(response => response.json()).then(data => {
-      if (data.user) {
-        document.getElementById('welcome-text').innerText = `Olá, ${data.user.userName}!`;
-        document.getElementById('user-action').innerHTML = 'Minha Conta <i class="fas fa-caret-down"></i>';
-        document.getElementById('dropdown-header').innerHTML = `<i class="fas fa-user-circle"></i> Olá, ${data.user.userName}!`;
-        document.getElementById('dropdown-header-mobile').innerHTML = `<i class="fas fa-user-circle"></i> Olá, ${data.user.userName}!`;
-        document.getElementById('login-button').style.display = 'none';
-        document.getElementById('logout-button').style.display = 'block';
-        document.getElementById('login-button-mobile').style.display = 'none';
-        document.getElementById('logout-button-mobile').style.display = 'block';
-      }
-    });
-  }
-  document.getElementById('login-button').addEventListener('click', closeNavMenu);
-  document.getElementById('login-button-mobile').addEventListener('click', closeNavMenu);
-});
-
-function closeNavMenu() {
-  const navMenu = document.querySelector('.nav-menu');
-  navMenu.classList.remove('active');
 }
 
 function logout() {

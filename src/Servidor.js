@@ -13,12 +13,23 @@ const port = process.env.PORT || 3000;
 const saltRounds = 10;
 const secretKey = process.env.SECRET_KEY;
 
+if (!secretKey) {
+  console.error('SECRET_KEY não definida no .env');
+  process.exit(1);
+}
+
 // Conectar ao MongoDB
 (async () => {
   try {
     const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      console.error('MONGODB_URI não definida no .env');
+      process.exit(1);
+    }
     console.log('Conectando ao MongoDB com a URI:', uri);
-    await mongoose.connect(uri);
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 30000
+    });
     console.log('Conectado ao MongoDB');
   } catch (err) {
     console.error('Erro ao conectar ao MongoDB', err);
@@ -163,6 +174,20 @@ app.get('/users/me', authenticate, async (req, res) => {
     console.error('Erro ao obter informações do usuário:', error);
     res.status(500).json({ message: 'Erro interno do servidor' });
   }
+});
+
+// Rota para obter detalhes do evento
+app.get('/event/:id', async (req, res) => {
+    const eventId = req.params.id;
+    try {
+        const event = events.find(e => e.id === parseInt(eventId));
+        if (!event) {
+            return res.status(404).json({ message: 'Evento não encontrado' });
+        }
+        res.json(event);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao obter detalhes do evento' });
+    }
 });
 
 // Iniciar o servidor
