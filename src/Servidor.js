@@ -51,6 +51,17 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// Define o modelo do carrinho
+const cartSchema = new mongoose.Schema({
+  userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+  items: [{
+    productId: {type: mongoose.Schema.Types.ObjectId, required: true},
+    quantity: {type: Number, required: true}
+  }]
+})
+
+const Cart = mongoose.model('Cart', cartSchema);
+
 // Middleware de autenticação
 const authenticate = (req, res, next) => {
   const authHeader = req.header('Authorization');
@@ -188,6 +199,74 @@ app.get('/event/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Erro ao obter detalhes do evento' });
     }
+});
+
+// Rota para adicionar item ao carrinho
+app.post('/cart', authenticate, async (req, res) => {
+  const {productId, quantity } = req.body;
+  try {
+    let cart = await Cart.findOne({ userId: req.user.userId});
+
+    if (!cart) {
+      cart = new Cart({ userId: req.user.userId, items: [] });
+    }
+
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity += quantity;
+    } else {
+      cart.items.push({ productId, quantity });
+    }
+
+    await cart.save();
+    res.status(201).json({ message: 'Item adicionado ao carrinho com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao adicionar item ao carrinho:', error);
+    res.status(500).json({ message: 'Erro interno no servidor.'})
+  }
+});
+
+// Rota para obter o carrinho do usuário
+app.get('/cart', authenticate, async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ userId: req.user.userId }).populate('items.productId');
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Carrinho não encontrado' });
+    }
+
+    res.json(cart);
+  } catch (error) {
+    console.error('Erro ao obter o carrinho:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+});
+
+// Rota para remover item do carrinho
+app.delete('/cart/:productId', authenticate, async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    const cart = await Cart.findOne({ userId: req.user.userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Carrinho não encontrado' });
+    }
+
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+
+    if (itemIndex > -1) {
+      cart.items.splice(itemIndex, 1);
+      await cart.save();
+      res.json({ message: 'Item removido do carrinho com sucesso.' });
+    } else {
+      res.status(404).json({ message: 'Item não encontrado no carrinho.' });
+    }
+  } catch (error) {
+    console.error('Erro ao remover item do carrinho:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
 });
 
 // Iniciar o servidor
