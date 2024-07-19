@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isVisible = searchModal.style.display === 'block';
     searchModal.style.display = isVisible ? 'none' : 'block';
     if (!isVisible) {
-      clearSearchInputs();
+      clearSearchInputs()
     }
   };
 
@@ -280,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
       url.searchParams.append('date', event.date);
       url.searchParams.append('location', event.location);
       url.searchParams.append('description', event.description);
+      url.searchParams.append('image', event.image);
       window.location.href = url.href;
     } else {
       console.error('Evento não encontrado');
