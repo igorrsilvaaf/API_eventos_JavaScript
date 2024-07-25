@@ -41,6 +41,29 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${day}/${month}/${year}`;
   }
 
+  // Pega o valor do usuário logado
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    fetch('http://localhost:3000/users/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('welcome-text').innerText = `Olá, ${data.user.userName}!`;
+          document.getElementById('user-action').innerHTML = 'Minha Conta <i class="fas fa-caret-down"></i>';
+          document.getElementById('dropdown-header').innerHTML = `<i class="fas fa-user-circle"></i> Olá, ${data.user.userName}!`;
+          document.getElementById('dropdown-header-mobile').innerHTML = `<i class="fas fa-user-circle"></i> Olá, ${data.user.userName}!`;
+          document.getElementById('dropdown-header-mobile').innerHTML = `<i class="fas fa-user-circle"></i> Olá, ${data.user.userName}!`;
+          document.getElementById('login-button').style.display = 'none';
+          document.getElementById('logout-button').style.display = 'block';
+          document.getElementById('login-button-mobile').style.display = 'none';
+          document.getElementById('logout-button-mobile').style.display = 'block';
+        })
+  }
+
   function formatTitle(title) {
     return title.toUpperCase();
   }
