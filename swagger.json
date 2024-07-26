@@ -1,0 +1,252 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "E-commerce",
+    "version": "1.0.0",
+    "description": "Documentação da API de E-commerce"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Registrar um novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userName": { "type": "string" },
+                  "userEmail": { "type": "string" },
+                  "userTelefone": { "type": "string" },
+                  "userCelular": { "type": "string" },
+                  "userCep": { "type": "string" },
+                  "userCidade": { "type": "string" },
+                  "userBairro": { "type": "string" },
+                  "userEndereco": { "type": "string" },
+                  "userPassword": { "type": "string" }
+                },
+                "required": ["userName", "userEmail", "userTelefone", "userCelular", "userCep", "userCidade", "userBairro", "userEndereco", "userPassword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário registrado com sucesso"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Autenticar um usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userEmail": { "type": "string" },
+                  "userPassword": { "type": "string" }
+                },
+                "required": ["userEmail", "userPassword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Obter informações do usuário autenticado",
+        "responses": {
+          "200": {
+            "description": "Informações do usuário"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Atualizar informações do usuário autenticado",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userName": { "type": "string" },
+                  "userEmail": { "type": "string" },
+                  "userTelefone": { "type": "string" },
+                  "userCelular": { "type": "string" },
+                  "userCep": { "type": "string" },
+                  "userCidade": { "type": "string" },
+                  "userBairro": { "type": "string" },
+                  "userEndereco": { "type": "string" },
+                  "userPassword": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Informações do usuário atualizadas"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Deletar a conta do usuário autenticado",
+        "responses": {
+          "200": {
+            "description": "Conta deletada com sucesso"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/cart": {
+      "post": {
+        "summary": "Adicionar um item ao carrinho do usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": { "type": "string" },
+                  "quantity": { "type": "number" }
+                },
+                "required": ["productId", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item adicionado ao carrinho com sucesso"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Obter o carrinho do usuário autenticado",
+        "responses": {
+          "200": {
+            "description": "Carrinho do usuário"
+          },
+          "404": {
+            "description": "Carrinho não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/cart/{productId}": {
+      "delete": {
+        "summary": "Remover um item do carrinho do usuário",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item removido do carrinho com sucesso"
+          },
+          "404": {
+            "description": "Item não encontrado no carrinho"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
