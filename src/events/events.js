@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   const events = [
-    { id: 1, title: 'After festa julina 2024', date: '2024-07-31', time: '20:00', location: 'Hangar 737', image: '../../assets/eventos/after_festa_julina.jpg', description: 'Descrição do evento' },
-    { id: 2, title: 'Baile do teddy', date: '2024-07-31', time: '22:00', location: 'Like Club Araranguá', image: '../../assets/eventos/baile_do_teddy.jpg', description: 'Quer ver L7NNON tocar? vem para Hangar' },
-    { id: 3, title: 'Oz Music', date: '2024-07-20', time: '23:30', location: 'Oz Pub Music', image: '../../assets/eventos/Oz_music.jpg', description: 'Descrição do evento' },
+    { id: 1, title: 'After festa julina 2024', date: '2024-08-31', time: '20:00', location: 'Hangar 737', image: '../../assets/eventos/after_festa_julina.jpg', description: 'Descrição do evento' },
+    { id: 2, title: 'Baile do teddy', date: '2024-08-31', time: '22:00', location: 'Like Club Araranguá', image: '../../assets/eventos/baile_do_teddy.jpg', description: 'Quer ver L7NNON tocar? vem para Hangar' },
+    { id: 3, title: 'Oz Music', date: '2024-08-20', time: '23:30', location: 'Oz Pub Music', image: '../../assets/eventos/Oz_music.jpg', description: 'Descrição do evento' },
     { id: 4, title: 'Armandinho em Caxias', date: '2024-08-12', time: '21:00', location: 'All Need Master Hall', image: '../../assets/eventos/Armandinho_em_caxias.jpg', description: 'Descrição do evento' },
-    { id: 5, title: 'Sunset Surf', date: '2024-07-30', time: '17:00', location: 'Éden GastroArts', image: '../../assets/eventos/sun_set.jpg', description: 'Descrição do evento' },
+    { id: 5, title: 'Sunset Surf', date: '2024-08-30', time: '17:00', location: 'Éden GastroArts', image: '../../assets/eventos/sun_set.jpg', description: 'Descrição do evento' },
     { id: 6, title: 'Felp22 Mixing Night', date: '2024-08-12', time: '22:00', location: 'Todai-Ji', image: '../../assets/eventos/Felp22_Mixing_Night.jpg', description: 'Descrição do evento' },
     { id: 7, title: 'Jeito louco + Situasamba', date: '2024-08-04', time: '07:00', location: 'Parque do balonismo', image: '../../assets/eventos/Jeito_louco.jpg', description: 'Descrição do evento' },
     { id: 8, title: 'Mamonas Assassinas o legado', date: '2024-08-04', time: '17:00', location: 'Indoor Music Park', image: '../../assets/eventos/mamonas_assassinas.jpg', description: 'Descrição do evento' },
