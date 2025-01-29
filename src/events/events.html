@@ -1,150 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eventos</title>
-  <link rel="stylesheet" href="../style/events.css">
-  <link rel="icon" href="../../assets/icon.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos - Facilitate Events</title>
+    <link rel="stylesheet" href="../style/events.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <header class="custom-header">
-    <div class="header-container">
-      <div class="logo">
-        <img src="../../assets/logo.png" alt="Logo">
-        <span>Facilitate Events</span>
-      </div>
-      <div class="auth-buttons">
-        <div class="welcome-text" id="welcome-text">Seja bem-vindo!</div>
-        <div class="dropdown">
-          <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)" id="user-action">Entrar na minha conta <i class="fas fa-caret-down"></i></a>
-          <div class="dropdown-menu">
-            <div class="dropdown-header" id="dropdown-header">
-              <i class="fas fa-user-circle"></i> Olá! Clique em entrar para acessar sua conta.
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="../index.html">
+                    <img src="../assets/logo.png" alt="Logo Facilitate Events">
+                </a>
             </div>
-            <a href="#" id="login-button" onclick="openLoginModal()"><i class="fas fa-sign-in-alt"></i> Entrar</a>
-            <a href="#" id="logout-button" onclick="logout()" style="display: none;"><i class="fas fa-sign-out-alt"></i> Sair</a>
-            <a href="../register/register.html"><i class="fas fa-user-plus"></i> Criar conta</a>
-            <a href="#"><i class="fas fa-user-tie"></i> Sou produtor</a>
-            <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
-            <a href="#"><i class="fas fa-map-marker-alt"></i> Minha localização</a>
-            <a href="#"><i class="fas fa-file-upload"></i> Cadastrar comprovante</a>
-            <a href="#" id="dark-mode-toggle" onclick="toggleDarkMode()">
-              <i id="dark-mode-icon" class="fas fa-moon"></i>
-              <span id="dark-mode-label">Modo Escuro</span>
-            </a>
-          </div>
+            <div class="search-bar">
+                <input type="text" id="event-search" placeholder="Buscar eventos">
+                <input type="text" id="location-search" placeholder="Local">
+                <button onclick="toggleSearchModal()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="user-section">
+                <span id="welcome-text">Seja bem-vindo!</span>
+                <div class="dropdown">
+                    <button class="dropdown-toggle" onclick="toggleDropdown(event)">
+                        <span id="user-action">Entrar na minha conta</span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header" id="dropdown-header">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Olá! Clique em entrar para acessar sua conta.</span>
+                        </div>
+                        <div class="dropdown-buttons">
+                            <button class="theme-toggle" onclick="toggleTheme(event)">
+                                <i class="fas fa-moon" id="theme-icon"></i>
+                                <span id="theme-text">Modo Escuro</span>
+                            </button>
+                            <button id="login-button" onclick="window.location.href='../login/login.html'">Entrar</button>
+                            <button onclick="window.location.href='../register/register.html'">Criar Conta</button>
+                            <button onclick="window.location.href='../producer/dashboard.html'" class="producer-button">Área do Produtor</button>
+                            <button onclick="window.location.href='../admin/dashboard.html'" class="admin-button" style="display: none;">Área Admin</button>
+                            <button id="logout-button" onclick="logout()" style="display: none;">Sair</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="icons">
-        <i class="fas fa-search search-icon" onclick="toggleSearchModal()"></i>
-        <i class="fas fa-bars menu-hamburger"></i>
-      </div>
-      <nav class="nav-menu">
-        <span class="close-nav-menu">&times;</span>
-        <div class="dropdown-header" id="dropdown-header-mobile">
-          <i class="fas fa-user-circle"></i> Olá! Clique em entrar para acessar sua conta.
+    </header>
+
+    <main>
+        <div class="carousel-container">
+            <div class="carousel" id="eventCarousel">
+                <!-- Imagens serão adicionadas dinamicamente -->
+            </div>
         </div>
-        <a href="#" id="login-button-mobile" onclick="openLoginModal()"><i class="fas fa-sign-in-alt"></i> Entrar</a>
-        <a href="#" id="logout-button-mobile" onclick="logout()" style="display: none;"><i class="fas fa-sign-out-alt"></i> Sair</a>
-        <a href="../register/register.html"><i class="fas fa-user-plus"></i> Criar conta</a>
-        <a href="#"><i class="fas fa-user-tie"></i> Sou produtor</a>
-        <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
-        <a href="#"><i class="fas fa-map-marker-alt"></i> Minha localização</a>
-        <a href="#"><i class="fas fa-file-upload"></i> Cadastrar comprovante</a>
-        <a href="#" id="dark-mode-toggle" onclick="toggleDarkMode()">
-              <i id="dark-mode-icon" class="fas fa-moon"></i>
-              <span id="dark-mode-label">Modo Escuro</span>
-            </a>
-      </nav>
-    </div>
-  </header>
 
-  <div id="search-modal" class="search-modal">
-    <div class="search-modal-content">
-      <span class="close" onclick="toggleSearchModal()">&times;</span>
-      <div class="search-box">
-        <label for="event-search-modal">BUSCAR EVENTOS</label>
-        <input type="text" id="event-search-modal" placeholder="Eventos, artistas, categorias e data">
-      </div>
-      <div class="search-box">
-        <label for="location-search-modal">LOCAL</label>
-        <input type="text" id="location-search-modal" placeholder="Casas de show, cidade e estado">
-      </div>
-      <button class="search-button">Buscar</button>
-    </div>
-  </div>
+        <section class="recent-events">
+            <h2 id="titleEventsNext">Eventos de Janeiro</h2>
+            <div class="events-grid" id="recentEventsContainer">
+                <!-- Eventos do mês atual serão adicionados aqui -->
+            </div>
+            <div id="noRecentEventsMessage" class="no-events-message" style="display: none;">
+                <i class="fas fa-calendar-times"></i>
+                <p>Nenhum evento encontrado para este mês.</p>
+            </div>
+        </section>
 
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeLoginModal()">&times;</span>
-      <iframe id="loginIframe" src="../login/login.html" frameborder="0"></iframe>
-    </div>
-  </div>
+        <section class="all-events">
+            <h2>Todos os eventos</h2>
+            <div class="events-grid" id="eventsContainer">
+                <!-- Todos os eventos serão adicionados aqui -->
+            </div>
+            <div id="noUpcomingEventsMessage" class="no-events-message" style="display: none;">
+                <i class="fas fa-calendar-times"></i>
+                <p>Nenhum evento encontrado.</p>
+            </div>
+        </section>
+    </main>
 
-  <!-- Carrossel de eventos -->
-  <div class="carousel-container">
-    <div class="carousel" id="eventCarousel">
-      <!-- Imagens do carrossel serão inseridas via JavaScript na função populateCarousel -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Buscar Eventos</h2>
+                <span class="close" onclick="toggleSearchModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="search-fields">
+                    <div class="search-field">
+                        <label for="event-search-modal">Nome do evento</label>
+                        <input type="text" id="event-search-modal" placeholder="Digite o nome do evento">
+                    </div>
+                    <div class="search-field">
+                        <label for="location-search-modal">Local</label>
+                        <input type="text" id="location-search-modal" placeholder="Digite o local">
+                    </div>
+                </div>
+                <button class="search-button">Buscar</button>
+            </div>
+        </div>
     </div>
-    <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
-    <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
-  </div>
 
-  <div class="search-container">
-    <h2>O que você está buscando?</h2>
-    <div class="search-boxes">
-      <div class="search-box">
-        <label for="event-search">EVENTOS</label>
-        <input type="text" id="event-search" placeholder="Eventos, artistas, categorias e data">
-      </div>
-      <div class="search-box">
-        <label for="location-search">LOCAL</label>
-        <input type="text" id="location-search" placeholder="Casas de show, cidade e estado">
-      </div>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <span class="close" onclick="closeLoginModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit">Entrar</button>
+                </form>
+                <p>Não tem uma conta? <a href="../register/register.html">Cadastre-se</a></p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="container">
-    <h2 id="titleEventsNext" class="titleEventsNext">Eventos de </h2>
-    <div id="recentEventsContainer"></div>
-    <div id="noRecentEventsMessage" class="no-events-message">Nenhum evento encontrado.</div>
-    <hr class="separator">
-    <h2 class="titleEventsOn">Eventos publicados</h2>
-    <div id="eventsContainer"></div>
-    <div id="noUpcomingEventsMessage" class="no-events-message">Nenhum evento encontrado.</div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="./events.js"></script>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre</h3>
+                <p>A Facilitate Events é uma plataforma de venda de ingressos para eventos.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p>Email: contato@facilitateevents.com</p>
+                <p>Telefone: (48) 99999-9999</p>
+            </div>
+            <div class="footer-section">
+                <h3>Redes Sociais</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Facilitate Events. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
-  <footer class="custom-footer">
-    <div class="footer-container">
-      <div class="footer-section">
-        <h3>Siga-nos</h3>
-        <ul class="social-links">
-          <li><a href="https://www.instagram.com/igor.codes/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
-          <li><a href="https://www.linkedin.com/in/igor-da-silva-francisco-b248bb289/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
-          <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
-          <li><a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h3>Links</h3>
-        <ul class="footer-links">
-          <li><a href="#">Política de Privacidade</a></li>
-          <li><a href="#">Troca e Devoluções</a></li>
-          <li><a href="#">Página de Suporte (FAQ)</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h3>Contato</h3>
-        <p>Endereço: Rua Dionísio Manoel Guarezi - Sertão dos Correias - Tubarão, SC</p>
-        <p>CNPJ: 54.544.497/0001-38</p>
-      </div>
-    </div>
-  </footer>
+    <script src="events.js"></script>
+    <script>
+        // Tema
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeText.textContent = 'Modo Escuro';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Modo Claro';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Carregar tema salvo
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Modo Claro';
+            }
+        });
+    </script>
 </body>
 </html>
