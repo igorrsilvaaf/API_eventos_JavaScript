@@ -1,33 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
+  <title>Cadastro - Eventos</title>
   <link rel="stylesheet" href="../style/register.css">
-  <link rel="icon" href="../../assets/logo.png">
+  <link rel="icon" href="../../assets/icon.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>Registro</h1>
+    <h1>Cadastro</h1>
     <form id="registerForm">
-      <input type="text" id="userName" placeholder="Nome" required>
-      <input type="email" id="userEmail" placeholder="Email" required>
-      <input type="text" id="userTelefone" placeholder="Telefone" required>
-      <input type="text" id="userCelular" placeholder="Celular" required>
-      <input type="text" id="userCep" placeholder="CEP" required>
-      <input type="text" id="userCidade" placeholder="Cidade" required>
-      <input type="text" id="userBairro" placeholder="Bairro" required>
-      <input type="text" id="userEndereco" placeholder="Endereço" required>
-      <input type="password" id="userPassword" placeholder="Senha" required>
-      <button type="submit">Registrar</button>
+      <div class="form-row">
+        <div class="form-group">
+          <input type="text" id="userName" placeholder="Nome completo *" required>
+          <span class="field-info">Digite seu nome completo</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <input type="email" id="userEmail" placeholder="E-mail *" required>
+          <span class="field-info">Digite um e-mail válido</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <input type="tel" id="userTelefone" placeholder="Telefone *" required>
+          <span class="field-info">Digite seu telefone fixo</span>
+        </div>
+        <div class="form-group">
+          <input type="tel" id="userCelular" placeholder="Celular *" required>
+          <span class="field-info">Digite seu celular</span>
+        </div>
+      </div>
+
+      <div id="addressFields">
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="userCep" placeholder="CEP *" required>
+            <span class="field-info">Digite seu CEP para autocompletar o endereço</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="userCidade" placeholder="Cidade *" required>
+            <span class="field-info">Cidade</span>
+          </div>
+          <div class="form-group">
+            <input type="text" id="userBairro" placeholder="Bairro *" required>
+            <span class="field-info">Bairro</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="userEndereco" placeholder="Endereço *" required>
+            <span class="field-info">Rua/Avenida e número</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <input type="password" id="userPassword" placeholder="Senha *" required>
+          <span class="field-info">Mínimo 6 caracteres</span>
+        </div>
+        <div class="form-group">
+          <input type="password" id="confirmPassword" placeholder="Confirmar senha *" required>
+          <span class="field-info">Digite a senha novamente</span>
+        </div>
+      </div>
+
+      <button type="submit">Cadastrar</button>
     </form>
     <div id="registerMessage"></div>
     <a href="../login/login.html">Já tem uma conta? Faça login</a>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/inputmask@5/dist/inputmask.min.js"></script>
   <script src="./register.js"></script>
 </body>
 </html>
