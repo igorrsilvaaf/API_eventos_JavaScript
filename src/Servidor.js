@@ -2,7 +2,7 @@ require('dotenv').config({ path: '.env' });
 
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express')
@@ -279,3 +279,5 @@ app.delete('/cart/:productId', authenticate, async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
+
+module.exports = app;
