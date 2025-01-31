@@ -8,4 +8,4 @@ services:
         fromEnv: MONGODB_URI 
     routes:
       - url: /* 
-    command: npm install && npm start
+    command: npm install && npm run start
