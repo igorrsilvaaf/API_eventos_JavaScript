@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "doc": "node swagger-autogen.js && node src/Servidor.js",
+    "start": "node src/Servidor.js",
     "dev": "node src/Servidor.js",
+    "doc": "node swagger-autogen.js && node src/Servidor.js",
     "test": "jest"
   },
   "keywords": [],
