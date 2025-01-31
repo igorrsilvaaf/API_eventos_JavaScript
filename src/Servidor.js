@@ -97,7 +97,7 @@ const authenticate = (req, res, next) => {
 
 // Rota para responder à raiz (/)
 app.get('/', (req, res) => {
-  res.send('Conectado com sucesso!');
+  res.send(path.join(__dirname, '../src/events', 'events.html'));
 });
 
 // Rota para registrar o novo usuário
