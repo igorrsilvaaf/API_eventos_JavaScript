@@ -6,41 +6,103 @@
 
 :root {
   /* Dark Theme (default) */
-  --primary-color: #6c63ff;
-  --secondary-color: #4CAF50;
-  --background-color: #1a1a1a;
-  --text-color: #ffffff;
-  --card-background: #2d2d2d;
-  --header-background: rgba(26, 26, 26, 0.95);
+  --primary-color: #6C63FF;
+  --text-color: #E2E8F0;
+  --background-color: #1E1E2E;
+  --card-background: rgba(35, 35, 58, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --header-background: rgba(35, 35, 58, 0.65);
   --header-height: 80px;
-  --input-background: rgba(255, 255, 255, 0.1);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --hover-color: rgba(255, 255, 255, 0.15);
+  --search-background: rgba(24, 24, 41, 0.8);
+  --dropdown-background: #23233A;
+  --hover-color: rgba(108, 99, 255, 0.1);
+  --input-background: var(--search-background);
   --shadow-color: rgba(0, 0, 0, 0.2);
-  --card-text: #ffffff;
+  --card-text: #E2E8F0;
   --secondary-text: rgba(255, 255, 255, 0.7);
 }
 
 /* Light Theme */
 [data-theme="light"] {
-  --primary-color: #6c63ff;
-  --secondary-color: #4CAF50;
-  --background-color: #f5f5f5;
-  --text-color: #333333;
-  --card-background: #ffffff;
-  --header-background: rgba(255, 255, 255, 0.95);
-  --header-height: 80px;
-  --input-background: rgba(0, 0, 0, 0.05);
+  --primary-color: #7C3AED;
+  --text-color: #1A1A1A;
+  --background-color: #F7FAFC;
+  --card-background: rgba(255, 255, 255, 0.85);
   --border-color: rgba(0, 0, 0, 0.1);
-  --hover-color: rgba(0, 0, 0, 0.05);
+  --header-background: rgba(255, 255, 255, 0.85);
+  --search-background: rgba(255, 255, 255, 0.9);
+  --dropdown-background: #FFFFFF;
+  --hover-color: rgba(124, 58, 237, 0.1);
   --shadow-color: rgba(0, 0, 0, 0.1);
-  --card-text: #333333;
+  --card-text: #1A1A1A;
   --secondary-text: rgba(0, 0, 0, 0.7);
 }
 
-body {
-  background-color: var(--background-color);
+[data-theme="light"] body {
+  background: linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%);
+}
+
+[data-theme="light"] .search-bar input {
+  background: var(--search-background);
+  border-color: var(--border-color);
   color: var(--text-color);
+}
+
+[data-theme="light"] .search-bar input::placeholder {
+  color: rgba(26, 26, 26, 0.5);
+}
+
+[data-theme="light"] .search-bar button {
+  background: linear-gradient(45deg, #7C3AED, #9F7AEA);
+}
+
+[data-theme="light"] .search-bar button:hover {
+  background: linear-gradient(45deg, #9F7AEA, #7C3AED);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+}
+
+[data-theme="light"] .dropdown-menu {
+  background: var(--card-background);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .dropdown-buttons button {
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+[data-theme="light"] .dropdown-buttons button:hover {
+  background: var(--hover-color);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .event-card {
+  background: var(--card-background);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .carousel-container {
+  background: var(--card-background);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .carousel-nav button {
+  background: linear-gradient(45deg, #7C3AED, #9F7AEA);
+}
+
+[data-theme="light"] .carousel-nav button:hover {
+  background: linear-gradient(45deg, #9F7AEA, #7C3AED);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #1E1E2E 0%, #171721 100%);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -82,17 +144,18 @@ header {
 }
 
 .search-bar input {
-  padding: 0.8rem 1rem;
-  border: none;
-  border-radius: 25px;
-  background-color: var(--input-background);
+  padding: 12px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--input-background);
   color: var(--text-color);
-  width: 100%;
+  font-size: 14px;
+  outline: none;
   transition: all 0.3s ease;
 }
 
 .search-bar input:focus {
-  outline: none;
+  border-color: var(--primary-color);
   background-color: var(--hover-color);
   box-shadow: 0 0 0 2px var(--primary-color);
 }
@@ -102,17 +165,28 @@ header {
 }
 
 .search-bar button {
-  background: none;
+  background: var(--primary-color);
+  color: white;
   border: none;
-  color: var(--text-color);
+  padding: 8px 16px;
+  border-radius: 8px;
   cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1.2rem;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar button i {
+  font-size: 16px;
 }
 
 .search-bar button:hover {
-  color: var(--primary-color);
+  background: #5650CC;
+  transform: translateY(-1px);
 }
 
 .user-section {
@@ -160,7 +234,7 @@ header {
   position: absolute;
   right: 0;
   top: calc(100% + 0.5rem);
-  background: var(--card-background);
+  background: var(--dropdown-background);
   border-radius: 15px;
   padding: 1rem;
   min-width: 250px;
@@ -168,6 +242,7 @@ header {
   box-shadow: 0 10px 20px var(--shadow-color);
   display: none;
   border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
 }
 
 .dropdown-menu.show {
@@ -201,8 +276,9 @@ header {
   padding: 0.8rem 1rem;
   border: none;
   border-radius: 25px;
-  background-color: var(--primary-color);
-  color: white;
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
@@ -214,8 +290,7 @@ header {
 }
 
 .dropdown-buttons button:hover {
-  transform: translateY(-1px);
-  background-color: #5650d8;
+  background-color: var(--hover-color);
 }
 
 .theme-toggle {
@@ -263,6 +338,9 @@ main {
   position: relative;
   border-radius: 15px;
   margin-bottom: 2rem;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
 }
 
 .carousel {
@@ -303,6 +381,15 @@ main {
 .next {
   right: 0;
   border-radius: 4px 0 0 4px;
+}
+
+.carousel-nav button {
+  background: var(--primary-color);
+  color: white;
+}
+
+.carousel-nav button:hover {
+  background: #5650CC;
 }
 
 /* Container Styles */
@@ -450,10 +537,12 @@ main {
 
 .event-card {
   background-color: var(--card-background);
+  border: 1px solid var(--border-color);
   border-radius: 15px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 6px var(--shadow-color);
+  backdrop-filter: blur(10px);
 }
 
 .event-card:hover {
@@ -673,6 +762,78 @@ footer {
 }
 
 /* Responsive Design */
+@media screen and (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .logo {
+    text-align: center;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .user-section {
+    width: 100%;
+    padding: 0 0.5rem;
+    order: -1;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
+
+  .dropdown-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .search-bar input {
+    width: 100%;
+    margin: 0;
+  }
+
+  .search-bar button {
+    width: 100%;
+    height: 40px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header-content {
+    padding: 0.25rem;
+  }
+
+  .logo img {
+    height: 35px;
+  }
+
+  .user-section {
+    padding: 0 0.25rem;
+  }
+
+  .dropdown-toggle {
+    font-size: 0.9rem;
+  }
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;

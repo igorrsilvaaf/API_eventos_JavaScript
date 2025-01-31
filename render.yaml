@@ -1,0 +1,11 @@
+services:
+  - name: web 
+    build: ./ 
+    env:
+      - key: NODE_VERSION 
+        value: 16.20.0
+      - key: MONGODB_URI 
+        fromEnv: MONGODB_URI 
+    routes:
+      - url: /* 
+    command: npm install && npm run dev
