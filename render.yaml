@@ -1,7 +1,7 @@
 services:
   - name: web
     buildCommand: npm ci
-    startCommand: npm start
+    startCommand: npm run start
     env:
       - key: NODE_VERSION
         value: 22.13.1
