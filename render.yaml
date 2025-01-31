@@ -1,12 +1,11 @@
 services:
-  - name: web 
-    build: ./ 
+  - name: web
+    buildCommand: npm install
+    startCommand: npm run start
     env:
       - key: NODE_VERSION 
-        value: 16.20.0
+        value: 22.13.1
       - key: MONGODB_URI 
         fromEnv: MONGODB_URI 
     routes:
-      - url: /* 
-    buildCommand: npm install
-    startCommand: npm run start
+      - url: /*
