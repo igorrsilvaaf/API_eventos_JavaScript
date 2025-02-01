@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(express.static(path.join(__dirname, '../src')));
+app.use(express.static(path.join(__dirname, '../src/')));
 
 const port = process.env.PORT || 3000;
 const saltRounds = 10;
@@ -97,7 +97,7 @@ const authenticate = (req, res, next) => {
 
 // Rota para responder à raiz (/)
 app.get('/', (req, res) => {
-  res.send(path.join(__dirname, '../src/events', 'events.html'));
+  res.sendFile(path.join(__dirname, '../events', 'events.html'));
 });
 
 // Rota para registrar o novo usuário
