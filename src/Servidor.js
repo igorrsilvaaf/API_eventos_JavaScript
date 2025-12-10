@@ -27,22 +27,41 @@ if (!secretKey) {
 }
 
 // Conectar ao MongoDB
-(async () => {
+// Função para conectar ao MongoDB com fallback para um servidor em memória
+const connectToMongo = async () => {
+  let uri = process.env.MONGODB_URI;
+  if (uri) console.log('Tentando conectar ao MongoDB com a URI:', uri);
+
   try {
-    const uri = process.env.MONGODB_URI;
-    if (!uri) {
-      console.error('MONGODB_URI não definida no .env');
+    if (uri) {
+      await mongoose.connect(uri, { serverSelectionTimeoutMS: 30000 });
+      console.log('Conectado ao MongoDB (URI fornecida)');
+      return;
+    }
+
+    // Se não houver URI definida, cairá no fallback abaixo
+    throw new Error('MONGODB_URI não definida');
+  } catch (err) {
+    console.error('Erro ao conectar ao MongoDB externo:', err && err.message ? err.message : err);
+
+    try {
+      // iniciar um MongoDB em memória como fallback (boa opção para desenvolvimento)
+      console.log('Iniciando MongoDB em memória (mongodb-memory-server) como fallback...');
+      const { MongoMemoryServer } = require('mongodb-memory-server');
+      const mongod = await MongoMemoryServer.create();
+      const memUri = mongod.getUri();
+      await mongoose.connect(memUri, { serverSelectionTimeoutMS: 30000 });
+      console.log('Conectado ao MongoDB em memória');
+      // não finalizamos o processo para que o servidor continue rodando
+    } catch (memErr) {
+      console.error('Falha ao iniciar MongoDB em memória:', memErr);
       process.exit(1);
     }
-    console.log('Conectando ao MongoDB com a URI:', uri);
-    await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 30000
-    });
-    console.log('Conectado ao MongoDB');
-  } catch (err) {
-    console.error('Erro ao conectar ao MongoDB', err);
   }
-})();
+};
+
+// Dispara a conexão
+connectToMongo();
 
 // Definir o modelo de tabela
 const userSchema = new mongoose.Schema({
@@ -97,7 +116,9 @@ const authenticate = (req, res, next) => {
 
 // Rota para responder à raiz (/)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../events/', 'events.html'));
+  // Antes apontava para ../events/events.html (arquivo não existe).
+  // __dirname já é a pasta `src`, então apontamos para `src/events/events.html`.
+  res.sendFile(path.join(__dirname, 'events', 'events.html'));
 });
 
 // Rota para registrar o novo usuário
